@@ -30,7 +30,11 @@ values."
      markdown
      clojure
      haskell
-     java)
+     java
+     elm
+     javascript
+     html
+     react)
 
    ;; List of additional packages that will be installed without being
    ;; wrapped in a layer. If you need some configuration for these
@@ -91,11 +95,10 @@ values."
    ;; List of themes, the first of the list is loaded when spacemacs starts.
    ;; Press <SPC> T n to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
-   dotspacemacs-themes '(fogus
-                         afternoon
-                         whiteboard
-                         underwater
-                         organic-green)
+   dotspacemacs-themes '(dakrone
+                         default
+                         dorsey
+                         fogus)
    ;; If non nil the cursor color matches the state color in GUI Emacs.
    dotspacemacs-colorize-cursor-according-to-state t
    ;; Default font. `powerline-scale' allows to quickly tweak the mode-line
@@ -244,10 +247,38 @@ layers configuration.
 This is the place where most of your configurations should be done. Unless it is
 explicitly specified that a variable should be set before a package is loaded,
 you should place your code here."
+
+  (setq-default
+   js2-basic-offset 2
+   css-indent-offset 2
+   web-mode-markup-indent-offset 2
+   web-mode-css-indent-offset 2
+   web-mode-code-indent-offset 2
+   web-mode-attr-indent-offset 2)
+
+  ;; 2 space indent also for element's attributes, concatenations, and
+  ;; contiguous fn calls
+  (with-eval-after-load 'web-mode
+    (add-to-list 'web-mode-indentation-params '("lineup-args" . nil))
+    (add-to-list 'web-mode-indentation-params '("lineup-concats" . nil))
+    (add-to-list 'web-mode-indentation-params '("lineup-calls" . nil)))
+
   (setq mac-option-modifier 'super)
   (setq mac-command-modifier 'meta)
 
-  (add-hook 'clojure-mode-hook 'enable-paredit-mode t))
+  (add-hook 'clojure-mode-hook 'enable-paredit-mode t)
+  (add-hook 'cider-repl-mode-hook 'enable-paredit-mode t)
+
+  (eval-after-load "clojure-mode"
+    '(progn
+       (put-clojure-indent 'thread-loop 1)
+       (put-clojure-indent 'every!! 1)))
+
+  (eval-after-load "cider-repl-mode"
+    '(progn
+       (setq cider-repl-display-in-current-window t)
+       (setq cider-show-error-buffer t)
+       (setq cider-repl-pop-to-buffer-on-connect nil))))
 
 ;; Do not write anything past this comment. This is where Emacs will
 ;; auto-generate custom variable definitions.
