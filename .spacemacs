@@ -23,7 +23,11 @@ values."
    ;; ----------------------------------------------------------------
    dotspacemacs-configuration-layers
    '(emacs-lisp
-     dockerfile
+     elixir
+     python
+     django
+     docker
+     shell
      rust
      git
      syntax-checking
