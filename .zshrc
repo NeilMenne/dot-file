@@ -9,7 +9,7 @@ HISTSIZE=5000
 SAVEHIST=5000
 HISTFILE=~/.zhistory
 
-plugins=(git battery github node colorize sudo virtualenv brew docker docker-compose lein npm vagrant)
+plugins=(git battery github node colorize sudo virtualenv brew docker docker-compose lein npm vagrant pyenv)
 source $ZSH/oh-my-zsh.sh
 
 # Aliases
