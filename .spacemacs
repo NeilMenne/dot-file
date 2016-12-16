@@ -22,7 +22,8 @@ values."
    ;; <M-m f e R> (Emacs style) to install them.
    ;; ----------------------------------------------------------------
    dotspacemacs-configuration-layers
-   '(emacs-lisp
+   '(yaml
+     emacs-lisp
      elixir
      python
      django
@@ -241,8 +242,7 @@ executes.
  This function is mostly useful for variables that need to be set
 before packages are loaded. If you are unsure, you should try in setting them in
 `dotspacemacs/user-config' first."
-  (add-to-list 'exec-path "~/.local/bin")
-  (add-hook 'haskell-mode-hook 'turn-on-haskell-indent))
+  (setq exec-path-from-shell-arguments '("-l")))
 
 (defun dotspacemacs/user-config ()
   "Configuration function for user code.
@@ -251,6 +251,9 @@ layers configuration.
 This is the place where most of your configurations should be done. Unless it is
 explicitly specified that a variable should be set before a package is loaded,
 you should place your code here."
+
+  (add-to-list 'exec-path "~/.local/bin")
+  (add-hook 'haskell-mode-hook 'turn-on-haskell-indent)
 
   (setq-default
    js2-basic-offset 2
@@ -269,9 +272,14 @@ you should place your code here."
 
   (setq mac-option-modifier 'super)
   (setq mac-command-modifier 'meta)
+  (setq create-lockfiles nil)
 
   (add-hook 'clojure-mode-hook 'enable-paredit-mode t)
   (add-hook 'cider-repl-mode-hook 'enable-paredit-mode t)
+
+  (eval-after-load "pyenv-mode"
+    '(progn
+       (setq python-auto-set-local-pyenv-version 'on-visit)))
 
   (eval-after-load "clojure-mode"
     '(progn
@@ -286,3 +294,23 @@ you should place your code here."
 
 ;; Do not write anything past this comment. This is where Emacs will
 ;; auto-generate custom variable definitions.
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   (quote
+    (yaml-mode powerline hydra inflections cider spinner clojure-mode company smartparens highlight flycheck haskell-mode request projectile helm helm-core yasnippet skewer-mode js2-mode magit magit-popup git-commit with-editor dash pyenv-mode-auto yapfify xterm-color ws-butler window-numbering which-key web-mode web-beautify volatile-highlights vi-tilde-fringe uuidgen use-package toml-mode toc-org tagedit sublime-themes spacemacs-theme spaceline smeargle slim-mode shell-pop scss-mode sass-mode restart-emacs rainbow-delimiters racer quelpa pyvenv pytest pyenv-mode py-isort pug-mode popwin pony-mode pip-requirements persp-mode pcre2el paradox orgit org-plus-contrib org-bullets open-junk-file ob-elixir neotree multi-term move-text mmm-mode markdown-toc magit-gitflow macrostep lorem-ipsum livid-mode live-py-mode linum-relative link-hint less-css-mode js2-refactor js-doc intero info+ indent-guide ido-vertical-mode hy-mode hungry-delete hlint-refactor hl-todo hindent highlight-parentheses highlight-numbers highlight-indentation hide-comnt help-fns+ helm-themes helm-swoop helm-pydoc helm-projectile helm-mode-manager helm-make helm-hoogle helm-gitignore helm-flx helm-descbinds helm-css-scss helm-ag haskell-snippets google-translate golden-ratio gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link gh-md flycheck-rust flycheck-pos-tip flycheck-mix flycheck-haskell flycheck-elm flx-ido fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-args evil-anzu eshell-z eshell-prompt-extras esh-help emmet-mode elm-mode elisp-slime-nav eclim dumb-jump dockerfile-mode docker define-word dakrone-theme cython-mode company-ghci company-ghc column-enforce-mode coffee-mode cmm-mode clj-refactor clean-aindent-mode cider-eval-sexp-fu cargo auto-highlight-symbol auto-compile anaconda-mode alchemist aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line)))
+ '(safe-local-variable-values
+   (quote
+    ((pony-settings
+      (make-pony-project :python "/Users/neilmenne/.pyenv/versions/saben-core/bin/python" :pythonpath "/Users/neilmenne/code/pylon/saben-core"))
+     (elixir-enable-compilation-checking . t)
+     (elixir-enable-compilation-checking)))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )

@@ -9,7 +9,7 @@ HISTSIZE=5000
 SAVEHIST=5000
 HISTFILE=~/.zhistory
 
-plugins=(git battery github node colorize sudo virtualenv brew docker docker-compose lein npm vagrant pyenv)
+plugins=(git battery github node colorize sudo virtualenv brew docker docker-compose lein npm vagrant)
 source $ZSH/oh-my-zsh.sh
 
 # Aliases
@@ -32,3 +32,6 @@ export NODE_NO_READLINE=1
 # mactex
 # eval `/usr/libexec/path_helper -s`
 
+# pyenv and virtual-env
+if which pyenv > /dev/null; then eval "$(pyenv init -)"; fi
+if which pyenv-virtualenv-init > /dev/null; then eval "$(pyenv virtualenv-init -)"; fi

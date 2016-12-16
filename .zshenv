@@ -12,7 +12,3 @@ fi
 if [ -z "$SSH_CLIENT" ]; then
 	EDITOR="/usr/local/bin/emacsclient"
 fi
-
-# pyenv and virtual-env
-if which pyenv > /dev/null; then eval "$(pyenv init -)"; fi
-if which pyenv-virtualenv-init > /dev/null; then eval "$(pyenv virtualenv-init -)"; fi
