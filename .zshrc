@@ -13,11 +13,10 @@ plugins=(git battery github node colorize sudo virtualenv brew docker docker-com
 source $ZSH/oh-my-zsh.sh
 
 # Aliases
-alias ll='ls -l'
-alias s='git status'
-alias b='git branch -av'
+alias la='ls -lah'
+alias gs='git status'
+alias gb='git branch -av'
 alias gg='git branch --merged | grep -v "\*" | xargs -n 1 git branch -d'
-alias grunt='grunt --no-color'
 alias irc="TERM=screen-256color irssi"
 alias nolimit="sudo sh -c 'ulimit -n 3072 && exec su $LOGNAME'"
 alias fv="fortune | tr '[:upper:]' '[:lower:]' | tr '\n' ' ' | sed -r 's/[^a-z]+/-/g' | cut -c 1-60"
