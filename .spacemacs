@@ -22,7 +22,14 @@ values."
    ;; <M-m f e R> (Emacs style) to install them.
    ;; ----------------------------------------------------------------
    dotspacemacs-configuration-layers
-   '(yaml
+   '(lua
+     ansible
+     go
+     terraform
+     sql
+     nginx
+     csv
+     yaml
      emacs-lisp
      elixir
      python
@@ -31,10 +38,11 @@ values."
      shell
      rust
      git
+     auto-completion
      syntax-checking
      markdown
      clojure
-     haskell
+     (haskell :variables haskell-completion-backend 'intero)
      java
      elm
      javascript
@@ -45,7 +53,8 @@ values."
    ;; wrapped in a layer. If you need some configuration for these
    ;; packages, then consider creating a layer. You can also put the
    ;; configuration in `dotspacemacs/user-config'.
-   dotspacemacs-additional-packages '(paredit)
+
+   dotspacemacs-additional-packages '(base16-theme)
    ;; A list of packages and/or extensions that will not be install and loaded.
    dotspacemacs-excluded-packages '()
    ;; If non-nil spacemacs will delete any orphan packages, i.e. packages that
@@ -100,10 +109,12 @@ values."
    ;; List of themes, the first of the list is loaded when spacemacs starts.
    ;; Press <SPC> T n to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
-   dotspacemacs-themes '(dakrone
-                         default
-                         dorsey
-                         fogus)
+   dotspacemacs-themes '(base16-dracula
+                         base16-atelier-dune
+                         base16-apathy
+                         base16-atelier-sulphurpool-light
+                         base16-paraiso)
+
    ;; If non nil the cursor color matches the state color in GUI Emacs.
    dotspacemacs-colorize-cursor-according-to-state t
    ;; Default font. `powerline-scale' allows to quickly tweak the mode-line
@@ -252,16 +263,25 @@ This is the place where most of your configurations should be done. Unless it is
 explicitly specified that a variable should be set before a package is loaded,
 you should place your code here."
 
+  ;; haskell things
+  (with-eval-after-load 'intero
+    (flycheck-add-next-checker 'intero '(warning . haskell-hlint)))
+
   (add-to-list 'exec-path "~/.local/bin")
-  (add-hook 'haskell-mode-hook 'turn-on-haskell-indent)
+
+  (setq-default display-buffer-reuse-frames t)
 
   (setq-default
    js2-basic-offset 2
    css-indent-offset 2
-   web-mode-markup-indent-offset 2
-   web-mode-css-indent-offset 2
+   web-mode-attr-indent-offset 2
    web-mode-code-indent-offset 2
-   web-mode-attr-indent-offset 2)
+   web-mode-css-indent-offset 2
+   web-mode-markup-indent-offset 2
+   web-mode-js-indent-offset 2
+   web-mode-js2-indent-offset 2)
+
+  (setq js2-mode-show-strict-warnings nil)
 
   ;; 2 space indent also for element's attributes, concatenations, and
   ;; contiguous fn calls
@@ -276,6 +296,7 @@ you should place your code here."
 
   (add-hook 'clojure-mode-hook 'enable-paredit-mode t)
   (add-hook 'cider-repl-mode-hook 'enable-paredit-mode t)
+  (setq flycheck-elixir-credo-strict t)
 
   (eval-after-load "pyenv-mode"
     '(progn
@@ -292,8 +313,6 @@ you should place your code here."
        (setq cider-show-error-buffer t)
        (setq cider-repl-pop-to-buffer-on-connect nil))))
 
-;; Do not write anything past this comment. This is where Emacs will
-;; auto-generate custom variable definitions.
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -301,7 +320,7 @@ you should place your code here."
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (org markdown-mode simple-httpd parent-mode haml-mode gitignore-mode pos-tip flx iedit anzu evil goto-chg undo-tree json-mode tablist docker-tramp json-snatcher json-reformat diminish ghc edn multiple-cursors paredit peg eval-sexp-fu seq queue rust-mode bind-map bind-key packed pythonic f s elixir-mode pkg-info epl avy popup async package-build yaml-mode powerline hydra inflections cider spinner clojure-mode company smartparens highlight flycheck haskell-mode request projectile helm helm-core yasnippet skewer-mode js2-mode magit magit-popup git-commit with-editor dash pyenv-mode-auto yapfify xterm-color ws-butler window-numbering which-key web-mode web-beautify volatile-highlights vi-tilde-fringe uuidgen use-package toml-mode toc-org tagedit sublime-themes spacemacs-theme spaceline smeargle slim-mode shell-pop scss-mode sass-mode restart-emacs rainbow-delimiters racer quelpa pyvenv pytest pyenv-mode py-isort pug-mode popwin pony-mode pip-requirements persp-mode pcre2el paradox orgit org-plus-contrib org-bullets open-junk-file ob-elixir neotree multi-term move-text mmm-mode markdown-toc magit-gitflow macrostep lorem-ipsum livid-mode live-py-mode linum-relative link-hint less-css-mode js2-refactor js-doc intero info+ indent-guide ido-vertical-mode hy-mode hungry-delete hlint-refactor hl-todo hindent highlight-parentheses highlight-numbers highlight-indentation hide-comnt help-fns+ helm-themes helm-swoop helm-pydoc helm-projectile helm-mode-manager helm-make helm-hoogle helm-gitignore helm-flx helm-descbinds helm-css-scss helm-ag haskell-snippets google-translate golden-ratio gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link gh-md flycheck-rust flycheck-pos-tip flycheck-mix flycheck-haskell flycheck-elm flx-ido fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-args evil-anzu eshell-z eshell-prompt-extras esh-help emmet-mode elm-mode elisp-slime-nav eclim dumb-jump dockerfile-mode docker define-word dakrone-theme cython-mode company-ghci company-ghc column-enforce-mode coffee-mode cmm-mode clj-refactor clean-aindent-mode cider-eval-sexp-fu cargo auto-highlight-symbol auto-compile anaconda-mode alchemist aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line)))
+    (ghub let-alist dash-functional f lua-mode powerline ob-elixir yaml-mode which-key web-mode use-package slim-mode rainbow-delimiters pyvenv pyenv-mode pug-mode pony-mode persp-mode orgit org-plus-contrib move-text mmm-mode magit-gitflow live-py-mode link-hint intero info+ hy-mode hlint-refactor highlight-parentheses highlight-numbers helm-swoop helm-projectile go-guru flycheck-haskell fill-column-indicator evil-surround evil-nerd-commenter evil-mc evil-matchit evil-escape evil-ediff eshell-prompt-extras esh-help elm-mode dumb-jump docker json-mode define-word cython-mode company-go company-ghc company-cabal clj-refactor inflections cider queue clojure-mode cargo auto-compile packed ansible alchemist ace-window ace-link avy anaconda-mode eclim tern iedit smartparens magit magit-popup git-commit with-editor evil goto-chg elixir-mode flycheck haskell-mode go-mode company projectile helm helm-core async yasnippet multiple-cursors skewer-mode js2-mode markdown-mode hydra rust-mode haml-mode dash s base16-theme yapfify xterm-color ws-butler winum web-beautify volatile-highlights vi-tilde-fringe uuidgen undo-tree toml-mode toc-org terraform-mode tagedit tablist sql-indent spaceline smeargle simple-httpd shell-pop scss-mode sass-mode restart-emacs racer pythonic pytest py-isort popwin pkg-info pip-requirements pcre2el parent-mode paredit paradox org-bullets open-junk-file nginx-mode neotree multi-term markdown-toc macrostep lorem-ipsum livid-mode linum-relative less-css-mode json-snatcher json-reformat js2-refactor js-doc jinja2-mode indent-guide hungry-delete hl-todo hindent highlight-indentation hide-comnt help-fns+ helm-themes helm-pydoc helm-mode-manager helm-make helm-hoogle helm-gitignore helm-flx helm-descbinds helm-css-scss helm-company helm-c-yasnippet helm-ag haskell-snippets google-translate golden-ratio go-eldoc gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link ghc gh-md fuzzy flycheck-rust flycheck-pos-tip flycheck-mix flycheck-elm flycheck-credo flx-ido fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-search-highlight-persist evil-numbers evil-magit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-args evil-anzu eshell-z emmet-mode elisp-slime-nav edn dockerfile-mode docker-tramp diminish csv-mode company-web company-tern company-statistics company-ghci company-emacs-eclim company-ansible company-anaconda column-enforce-mode coffee-mode cmm-mode clojure-snippets clean-aindent-mode cider-eval-sexp-fu bind-key auto-yasnippet auto-highlight-symbol ansible-doc aggressive-indent adaptive-wrap ace-jump-helm-line ac-ispell)))
  '(safe-local-variable-values
    (quote
     ((pony-settings

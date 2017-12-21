@@ -4,6 +4,7 @@
 
 [core]
 	whitespace = trailing-space,space-before-tab
+	editor = emacsclient
 
 [alias]
 	assume   = update-index --assume-unchanged
