@@ -18,13 +18,16 @@ DEV_USER='neil_pylon'
 alias la='ls -lah'
 alias gs='git status'
 alias gb='git branch -av'
-alias gg='git branch --merged | grep -v "\*" | xargs -n 1 git branch -d'
+alias gg='git branch --merged | grep -v "\*" | xargs -n 1 git branch -d && git fetch --prune origin'
 alias irc="TERM=screen-256color irssi"
 alias nolimit="sudo sh -c 'ulimit -n 3072 && exec su $LOGNAME'"
 alias fv="fortune | tr '[:upper:]' '[:lower:]' | tr '\n' ' ' | sed -r 's/[^a-z]+/-/g' | cut -c 1-60"
 alias pytest="python -m pytest"
 alias pla="ls -1 */__init__.py | sed -r 's|/.*||' | xargs pylint -r n"
 alias azd="aws-vault exec $DEV_USER --"
+alias mxcvr="MIX_ENV=test mix coveralls"
+alias tegtest='GOOGLE_KEY=`cat ~/.pylon/google.pem` mix test --only integration:true'
+alias drc='sudo docker exec -it $(sudo docker ps | grep pylon | awk "{print $1}") _build/prod/rel/pylon_core/bin/pylon_core remote_console'
 
 
 setopt HIST_IGNORE_ALL_DUPS
@@ -50,3 +53,8 @@ PYSPARK_DRIVER_PYTHON='jupyter'
 PYSPARK_DRIVER_PYTHON_OPTS='notebook'
 PATH="$PATH:$SPARK_HOME/bin:$HADOOP_HOME/bin"
 SPARK_DIST_CLASSPATH=$(hadoop classpath)
+
+# opam configuration
+test -r /Users/neilmenne/.opam/opam-init/init.zsh && . /Users/neilmenne/.opam/opam-init/init.zsh > /dev/null 2> /dev/null || true
+export PATH="/usr/local/opt/terraform@0.11/bin:$PATH"
+export PATH="/usr/local/opt/terraform@0.11/bin:$PATH"
